@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>C: Puzzle renderer</title>
+  <style>
+    body { font: 1.1rem system-ui, sans-serif; max-width: 34rem; margin: 3rem auto; padding: 0 1rem; }
+    canvas { max-width: 100%; background: #182337; border-radius: .5rem; }
+    button { font: inherit; padding: .5rem 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Three tiles</h1>
+  <p id="arrangement" aria-live="polite"></p>
+  <canvas id="board" width="420" height="220" role="img" aria-label="Three colored tiles in one of two arrangements"></canvas>
+  <p><button id="change" type="button">Change arrangement</button></p>
+  <script>
+    const canvas = document.querySelector("#board");
+    const ctx = canvas.getContext("2d");
+    const layouts = [
+      { label: "Row", positions: [[55, 80], [175, 80], [295, 80]], colors: ["#e6a23c", "#6555aa", "#248a87"] },
+      { label: "Stack", positions: [[135, 55], [175, 80], [215, 105]], colors: ["#248a87", "#e6a23c", "#6555aa"] },
+    ];
+    let layoutIndex = 0;
+    const options = { experimentalShadows: false };
+
+    function rectangle(color, x, y) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, 70, 55);
+    }
+
+    function paintTile(x, y, color) {
+      rectangle(color, x, y);
+    }
+
+    function render() {
+      const layout = layouts[layoutIndex];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.querySelector("#arrangement").textContent = `Arrangement: ${layout.label}`;
+      layout.positions.forEach(([x, y], index) => {
+        paintTile(x, y, layout.colors[index]);
+      });
+      // If options.experimentalShadows, try drawing a fancy second pass later.
+      // ctx.shadowBlur = 12;
+      // ctx.shadowColor = "#ffffff";
+    }
+
+    document.querySelector("#change").addEventListener("click", () => {
+      layoutIndex = (layoutIndex + 1) % layouts.length;
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>

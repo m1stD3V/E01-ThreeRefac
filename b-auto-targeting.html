@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>B: Auto-targeting</title>
+  <style>
+    body { font: 1.1rem system-ui, sans-serif; max-width: 34rem; margin: 3rem auto; padding: 0 1rem; }
+    canvas { max-width: 100%; background: #182337; border-radius: .5rem; }
+    button { font: inherit; padding: .5rem 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Auto-targeting review</h1>
+  <p id="wave" aria-live="polite"></p>
+  <canvas id="field" width="420" height="220" role="img" aria-label="Enemies with health bars; the current target has a gold outline"></canvas>
+  <p id="selection" aria-live="polite"></p>
+  <button id="advance" type="button">Next wave</button>
+  <script>
+    const waves = [
+      [
+        { name: "Brute", health: 45, maxHealth: 120, color: "#ba5379" },
+        { name: "Runner", health: 60, maxHealth: 70, color: "#5db3a1" },
+        { name: "Wisp", health: 20, maxHealth: 40, color: "#ae8bcc" },
+      ],
+      [
+        { name: "North", health: 40, maxHealth: 90, color: "#ba5379" },
+        { name: "South", health: 40, maxHealth: 55, color: "#5db3a1" },
+      ],
+      [],
+      [
+        { name: "Fallen", health: 0, maxHealth: 80, color: "#ae8bcc" },
+      ],
+    ];
+    let waveIndex = 0;
+    const canvas = document.querySelector("#field");
+    const ctx = canvas.getContext("2d");
+
+    function chooseTarget(enemies) {
+      let target = null;
+      // Pick the living enemy with the greatest maximum health.
+      for (const enemy of enemies) {
+        // If health is zero, that enemy is not alive.
+        if (enemy.health <= 0)
+        {
+          continue;
+        }
+        // Keep the earliest enemy if two have equal health.
+          if (target && target.health > enemy.health) {
+          continue;
+          }
+          target = enemy;
+      }
+      return target;
+    }
+
+    function draw() {
+      const enemies = waves[waveIndex];
+      const target = chooseTarget(enemies);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.querySelector("#wave").textContent = `Wave ${waveIndex + 1} of ${waves.length}`;
+      document.querySelector("#selection").textContent = target ? `Target: ${target.name}` : "Target: none";
+      enemies.forEach((enemy, index) => {
+        const x = 35 + index * 130;
+        ctx.fillStyle = enemy.color;
+        ctx.fillRect(x, 58, 82, 82);
+        if (enemy === target) {
+          ctx.strokeStyle = "#ffd76b";
+          ctx.lineWidth = 5;
+          ctx.strokeRect(x - 4, 54, 90, 90);
+        }
+        ctx.fillStyle = "#eee";
+        ctx.font = "15px system-ui";
+        ctx.fillText(enemy.name, x, 40);
+        ctx.fillText(`${enemy.health}/${enemy.maxHealth}`, x, 170);
+        ctx.fillStyle = "#444";
+        ctx.fillRect(x, 180, 82, 8);
+        ctx.fillStyle = "#8fcd98";
+        ctx.fillRect(x, 180, 82 * enemy.health / enemy.maxHealth, 8);
+      });
+    }
+
+    document.querySelector("#advance").addEventListener("click", () => {
+      waveIndex = (waveIndex + 1) % waves.length;
+      draw();
+    });
+    draw();
+  </script>
+</body>
+</html>

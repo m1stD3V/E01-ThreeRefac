@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A: Lighting controls</title>
+  <style>
+    body { font: 1.1rem system-ui, sans-serif; max-width: 34rem; margin: 3rem auto; padding: 0 1rem; }
+    .panel { display: flex; align-items: center; gap: 1rem; min-height: 6rem; }
+    #swatch { width: 4rem; height: 4rem; border: 2px solid #222; border-radius: .5rem; }
+    button { font: inherit; padding: .5rem 1rem; margin-right: .5rem; }
+  </style>
+</head>
+<body>
+  <h1>Color carousel</h1>
+  <p>Three old stage-light presets. Try both directions and wrap around.</p>
+  <div class="panel"><div id="swatch" aria-hidden="true"></div><strong id="label" aria-live="polite"></strong></div>
+  <button id="previous" type="button">Previous</button>
+  <button id="next" type="button">Next</button>
+  <script>
+    const X = [
+      { name: "Amber", color: "#e6a23c" },
+      { name: "Indigo", color: "#6555aa" },
+      { name: "Teal", color: "#248a87" },
+    ];
+    let x = 0;
+    let updates_enabled = true;
+    const label = document.querySelector("#label");
+    const swatch = document.querySelector("#swatch");
+
+    function update() {
+      if (updates_enabled) {
+        let item = X[0];
+        for (let i = 0; i < X.length; i++) {
+          if (i === x) item = X[i];
+        }
+        label.textContent = item.name;
+        swatch.style.backgroundColor = item.color;
+      } else {
+        console.log("ignored update while updates are disabled");
+      }
+    }
+
+    document.querySelector("#next").addEventListener("click", () => {
+      x = (x + 1) % X.length;
+      update();
+    });
+    document.querySelector("#previous").addEventListener("click", () => {
+      x = (x - 1 + X.length) % X.length;
+      update();
+    });
+    update();
+  </script>
+</body>
+</html>
