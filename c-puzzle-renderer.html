@@ -18,11 +18,32 @@
   <script>
     const canvas = document.querySelector("#board");
     const ctx = canvas.getContext("2d");
-    const layouts = [
-      { label: "Row", positions: [[55, 80], [175, 80], [295, 80]], colors: ["#e6a23c", "#6555aa", "#248a87"] },
-      { label: "Stack", positions: [[135, 55], [175, 80], [215, 105]], colors: ["#248a87", "#e6a23c", "#6555aa"] },
-    ];
+    //const layouts = [
+      //{ label: "Row", positions: [[55, 80], [175, 80], [295, 80]], colors: ["#e6a23c", "#6555aa", "#248a87"] },
+      //{ label: "Stack", positions: [[135, 55], [175, 80], [215, 105]], colors: ["#248a87", "#e6a23c", "#6555aa"] },
+    //];
+    class layout {
+	    constructor(label, positions, colors) {
+		    this.label = label;
+		    this.positions = positions;
+		    this.colors = colors;
+	    }
+    }
+
+    const Row = new layout(
+	    "Row",
+	    [[55, 80], [175, 80], [295, 80]],
+	    ["#e6a23c", "#6555aa", "#248a87"]
+    );
+
+    const Stack = new layout(
+	    "Stack",
+	    [[135, 55], [175, 80], [215, 105]],
+	    ["#248a87", "#e6a23c", "#6555aa"]
+    );
+
     let layoutIndex = 0;
+    let layouts = [Row, Stack];
     const options = { experimentalShadows: false };
 
     function createTile(x, y, color) {
