@@ -25,13 +25,9 @@
     let layoutIndex = 0;
     const options = { experimentalShadows: false };
 
-    function rectangle(color, x, y) {
+    function createTile(x, y, color) {
       ctx.fillStyle = color;
       ctx.fillRect(x, y, 70, 55);
-    }
-
-    function paintTile(x, y, color) {
-      rectangle(color, x, y);
     }
 
     function render() {
@@ -39,7 +35,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       document.querySelector("#arrangement").textContent = `Arrangement: ${layout.label}`;
       layout.positions.forEach(([x, y], index) => {
-        paintTile(x, y, layout.colors[index]);
+        createTile(x, y, layout.colors[index]);
       });
       // If options.experimentalShadows, try drawing a fancy second pass later.
       // ctx.shadowBlur = 12;
