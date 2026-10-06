@@ -18,10 +18,7 @@
   <script>
     const canvas = document.querySelector("#board");
     const ctx = canvas.getContext("2d");
-    //const layouts = [
-      //{ label: "Row", positions: [[55, 80], [175, 80], [295, 80]], colors: ["#e6a23c", "#6555aa", "#248a87"] },
-      //{ label: "Stack", positions: [[135, 55], [175, 80], [215, 105]], colors: ["#248a87", "#e6a23c", "#6555aa"] },
-    //];
+
     class layout {
 	    constructor(label, positions, colors) {
 		    this.label = label;
@@ -44,7 +41,6 @@
 
     let layoutIndex = 0;
     let layouts = [Row, Stack];
-    const options = { experimentalShadows: false };
 
     function createTile(x, y, color) {
       ctx.fillStyle = color;
@@ -58,9 +54,6 @@
       layout.positions.forEach(([x, y], index) => {
         createTile(x, y, layout.colors[index]);
       });
-      // If options.experimentalShadows, try drawing a fancy second pass later.
-      // ctx.shadowBlur = 12;
-      // ctx.shadowColor = "#ffffff";
     }
 
     document.querySelector("#change").addEventListener("click", () => {
