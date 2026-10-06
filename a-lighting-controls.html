@@ -23,22 +23,22 @@
       { name: "Indigo", color: "#6555aa" },
       { name: "Teal", color: "#248a87" },
     ];
-    let Selector_incrmnt = 0;
+    let currentIdx = 0;
     const label = document.querySelector("#label");
     const swatch = document.querySelector("#swatch");
 
     function update() {
-        let item = Color[Selector_incrmnt];
+        let item = Color[currentIdx];
         label.textContent = item.name;
         swatch.style.backgroundColor = item.color;
      }
     
     document.querySelector("#next").addEventListener("click", () => {
-      Selector_incrmnt = (Selector_incrmnt + 1) % Color.length;
+      currentIdx = (currentIdx + 1) % Color.length;
       update();
     });
     document.querySelector("#previous").addEventListener("click", () => {
-      Selector_incrmnt = (Selector_incrmnt - 1 + Color.length) % Color.length;
+      currentIdx = (currentIdx - 1 + Color.length) % Color.length;
       update();
     });
     update();
